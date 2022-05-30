@@ -23,9 +23,9 @@ const categorySchema = Joi.object({
 const gamesSchema = Joi.object({
     name: Joi.string().required(),
     image: Joi.string().required(),
-    stockTotal: Joi.number().integer().required(),
+    stockTotal: Joi.number().integer().min(1).required(),
     categoryId: Joi.number().integer().required(),
-    pricePerDay: Joi.number().required(),
+    pricePerDay: Joi.number().min(1).required(),
 });
 
 const rentalsSchemas = Joi.object({
