@@ -32,7 +32,6 @@ const categoryValidation = async (req, res, next) => {
     `,
             [req.body.name]
         );
-        console.log(result);
         if (result.rowCount) {
             return res.sendStatus(409);
         }
