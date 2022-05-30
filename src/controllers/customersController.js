@@ -26,7 +26,7 @@ const getCustomerById = async (req, res) => {
             [id]
         );
         if (!customers.rowCount) {
-            return res.sendStatus(404);
+            return res.status(404).send({ details: "Cliente Inexistente" });
         }
         res.status(200).send(customers.rows);
     } catch (err) {
@@ -45,9 +45,9 @@ const createCustomers = async (req, res) => {
             [cpf]
         );
         if (hasCpf.rowCount) {
-            return res.sendStatus(409);
+            return res.status(409).send({ details: "Conflito de CPF" });
         }
-        const postCustomer = await db.query(
+        await db.query(
             `
         INSERT INTO customers (name, phone, cpf, birthday) 
         VALUES ($1, $2, $3, to_date($4, 'YYYY-MM-DD'));

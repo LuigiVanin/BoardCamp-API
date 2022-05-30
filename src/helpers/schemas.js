@@ -4,7 +4,8 @@ const customerSchemas = Joi.object({
     name: Joi.string().required(),
     phone: Joi.string()
         .pattern(/^[0-9]+$/)
-        .length(9)
+        .min(10)
+        .max(11)
         .required(), //
     cpf: Joi.string()
         .pattern(/^[0-9]+$/)
@@ -30,7 +31,7 @@ const gamesSchema = Joi.object({
 const rentalsSchemas = Joi.object({
     customerId: Joi.number().integer().required(),
     gameId: Joi.number().integer().required(),
-    daysRented: Joi.number().integer().required(),
+    daysRented: Joi.number().integer().min(1).required(),
 });
 
 export { customerSchemas, categorySchema, gamesSchema, rentalsSchemas };

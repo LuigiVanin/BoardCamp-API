@@ -72,11 +72,11 @@ const returnRentals = async (req, res) => {
         );
 
         if (!rental.rowCount) {
-            return res.sendStatus(404);
+            return res.status(404).send({ details: "Aluguel Inexistente" });
         }
         rental = rental.rows[0];
         if (rental.returnDate != null) {
-            return res.sendStatus(400);
+            return res.status(400).send({ details: "Aluguel já finalizado" });
         }
         let dayDiff = today - rental.rentDate;
         dayDiff = Math.floor(dayDiff / (1000 * 60 * 60 * 24));
@@ -106,7 +106,11 @@ const deleteRentals = async (req, res) => {
             [id]
         );
         if (!hasRental.rowCount) {
-            return res.sendStatus(404);
+            return res.status(404).send({ details: "Aluguel Inexistente" });
+        }
+        console.log(hasRental.rows[0].returnDate);
+        if (hasRental.rows[0].returnDate != null) {
+            return res.status(400).send({ details: "Aluguel já finalizado" });
         }
         await db.query(
             `

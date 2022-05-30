@@ -33,7 +33,9 @@ const categoryValidation = async (req, res, next) => {
             [req.body.name]
         );
         if (result.rowCount) {
-            return res.sendStatus(409);
+            return res
+                .status(409)
+                .send({ details: "Nome de categoria já existente" });
         }
     } catch (err) {
         console.log(err);
@@ -56,8 +58,17 @@ const gamesValidation = async (req, res, next) => {
         `,
             [req.body.categoryId]
         );
+        const gameName = await db.query(
+            `
+            SELECT * FROM games WHERE name = $1
+        `,
+            [req.body.name]
+        );
         if (!result.rowCount) {
-            return res.sendStatus(400);
+            return res.status(400).send({ details: "Categoria inválida" });
+        }
+        if (gameName.rowCount) {
+            return res.status(409).send({ details: "Conflito de nome" });
         }
     } catch (err) {
         console.log(err);
@@ -94,7 +105,9 @@ const rentalsValidation = async (req, res, next) => {
         );
 
         if (rentals.rowCount >= hasGame.rows[0].stockTotal) {
-            return res.sendStatus(400);
+            return res
+                .status(400)
+                .send({ details: "Todos os Jogos já foram alugados :(" });
         }
         res.locals.pricePerDay = hasGame.rows[0].pricePerDay;
     } catch (err) {
